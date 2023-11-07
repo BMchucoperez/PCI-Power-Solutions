@@ -1,5 +1,4 @@
-import React from "react";
-import { AllCommunityModules, GridApi } from "@ag-grid-community/all-modules";
+import React, {useRef} from "react";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import data from "./near-earth-asteroids.json";
@@ -12,7 +11,8 @@ const columnDefs: ColDef[] = [
   { field: "discovery_date", headerName: "Discovery Date", sortable: true, filter: "agDateColumnFilter", valueFormatter: (params)=>{
     const date = new Date(params.value);
     return date.toLocaleDateString();
-  } }, // Task #3
+    } 
+  }, // Task #3
   { field: "h_mag", headerName: "H (mag)", sortable: true, filter: "agNumberColumnFilter" },
   { field: "moid_au", headerName: "MOID (au)", sortable: true, filter: "agNumberColumnFilter" },
   { field: "q_au_1", headerName: "q (au)", sortable: true, filter: "agNumberColumnFilter" },
@@ -29,21 +29,26 @@ const columnDefs: ColDef[] = [
       return "";
     }
     return value;
-  } }, // Task #4
+    } 
+  }, // Task #4
   { field: "orbit_class", headerName: "Orbit Class", sortable: true, filter: "agTextColumnFilter", enableRowGroup: true },
 ];
 
 const NeoGrid = (): JSX.Element => {
-  const gridRef = React.useRef<AgGridReact | null>(null);
+  const gridRef = useRef<AgGridReact | null>(null);
+  
+  // Task #6
   const clearFiltersAndSort = () => {
     if (gridRef.current) {
-      const gridInstance = gridRef.current;
-      gridInstance.api.setFilterModel({});
-      gridInstance.api.setSortModel([]);
-      gridInstance.api.refreshServerSideStore({ purge: true }); 
+      const gridApi = gridRef.current.api;
+      gridApi.setFilterModel(null);
+      
+      gridApi.setSortModel([]);
+
+      gridApi.refreshClientSideRowModel("filterAndSort");
     }
   };
-
+  
   return (
     <div>
       <h1 style={{ display: "inline-block", marginRight: "15px" }}>Near-Earth Object Overview</h1> {/*Task #1*/}
@@ -54,7 +59,7 @@ const NeoGrid = (): JSX.Element => {
           rowData={data}
           columnDefs={columnDefs}
           enableRangeSelection={true}
-          modules={AllCommunityModules}
+          enableSorting={true}
           rowGroupPanelShow={'always'}
         />
       </div>

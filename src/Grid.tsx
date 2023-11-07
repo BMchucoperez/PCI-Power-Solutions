@@ -1,4 +1,5 @@
 import React, {useRef} from "react";
+import { AllCommunityModules } from "@ag-grid-community/all-modules";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import data from "./near-earth-asteroids.json";
@@ -13,12 +14,12 @@ const columnDefs: ColDef[] = [
     return date.toLocaleDateString();
     } 
   }, // Task #3
-  { field: "h_mag", headerName: "H (mag)", sortable: true, filter: "agNumberColumnFilter" },
-  { field: "moid_au", headerName: "MOID (au)", sortable: true, filter: "agNumberColumnFilter" },
-  { field: "q_au_1", headerName: "q (au)", sortable: true, filter: "agNumberColumnFilter" },
-  { field: "q_au_2", headerName: "Q (au)", sortable: true, filter: "agNumberColumnFilter" },
-  { field: "period_yr", headerName: "Period (yr)", sortable: true, filter: "agNumberColumnFilter"},
-  { field: "i_deg", headerName: "Inclination (deg)", sortable: true, filter: "agNumberColumnFilter" },
+  { field: "h_mag", headerName: "H (mag)", sortable: true, filter: "agTextColumnFilter" },
+  { field: "moid_au", headerName: "MOID (au)", sortable: true, filter: "agTextColumnFilter" },
+  { field: "q_au_1", headerName: "q (au)", sortable: true, filter: "agTextColumnFilter" },
+  { field: "q_au_2", headerName: "Q (au)", sortable: true, filter: "agTextColumnFilter" },
+  { field: "period_yr", headerName: "Period (yr)", sortable: true, filter: "agTextColumnFilter"},
+  { field: "i_deg", headerName: "Inclination (deg)", sortable: true, filter: "agTextColumnFilter" },
   { field: "pha", headerName: "Potentially Hazardous", sortable: true, filter: "agTextColumnFilter", valueFormatter: (params) => {
     const value = params.value;
     if(value === "Y"){
@@ -41,11 +42,16 @@ const NeoGrid = (): JSX.Element => {
   const clearFiltersAndSort = () => {
     if (gridRef.current) {
       const gridApi = gridRef.current.api;
+      const columnApi = gridRef.current.columnApi;
       gridApi.setFilterModel(null);
       
-      gridApi.setSortModel([]);
-
-      gridApi.refreshClientSideRowModel("filterAndSort");
+      const allColumns = columnApi.getAllColumns();
+      const columnState = allColumns.map((column) => ({
+        colId: column.getColId(),
+        sort: null, 
+      }));
+      columnApi.applyColumnState({ state: columnState });
+      gridApi.refreshClientSideRowModel(undefined);
     }
   };
   
@@ -59,6 +65,8 @@ const NeoGrid = (): JSX.Element => {
           rowData={data}
           columnDefs={columnDefs}
           enableRangeSelection={true}
+          rowSelection="multiple"
+          suppressRowClickSelection={true}
           enableSorting={true}
           rowGroupPanelShow={'always'}
         />

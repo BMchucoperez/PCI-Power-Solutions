@@ -1,4 +1,7 @@
-<<<<<<< HEAD
+![Foto1](https://github.com/BMchucoperez/PCI-Power-Solutions/blob/main/Images/Foto1.png)
+
+![Foto2](https://github.com/BMchucoperez/PCI-Power-Solutions/blob/main/Images/Foto2.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

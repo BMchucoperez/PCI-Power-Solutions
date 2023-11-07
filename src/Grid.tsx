@@ -6,6 +6,7 @@ import data from "./near-earth-asteroids.json";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
+
 // Task #2
 const columnDefs: ColDef[] = [
   { field: "designation", headerName: "Designation", sortable: true, filter: "agTextColumnFilter" },
@@ -34,6 +35,7 @@ const columnDefs: ColDef[] = [
   }, // Task #4
   { field: "orbit_class", headerName: "Orbit Class", sortable: true, filter: "agTextColumnFilter", enableRowGroup: true },
 ];
+
 
 const NeoGrid = (): JSX.Element => {
   const gridRef = useRef<AgGridReact | null>(null);
